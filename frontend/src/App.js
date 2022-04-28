@@ -15,7 +15,13 @@ function App() {
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [ispopupVisible, setIspopupVisible] = useState(true);
-
+  const [newPalce, setNewPlace] = useState(null);
+  const [viewport, setViewport] = useState({
+    longitude: 35,
+    latitude: 49,
+    zoom: 6
+  })
+  
 
 
   useEffect(() => {
@@ -32,13 +38,27 @@ function App() {
     console.log(pins);
   }, [])
 
-  const handleMarkerClick = (id) => {
+  const handleMarkerClick = (id,lat,long) => {
     setCurrentPlaceId(id);
     setIspopupVisible(true)
+    setViewport({
+      ...viewport,
+      longitude: long,
+      latitude: lat,
+    })
   }
 
   const handleClose = () => {
     setIspopupVisible(false);
+  }
+
+  const handleAddClick = (e) => {
+    
+    const {lat, lng} = e.lngLat;
+    setNewPlace({
+      lat,
+      long: lng
+    });
   }
 
 
@@ -47,20 +67,17 @@ function App() {
     <div className="App">
       <Map
         mapboxAccessToken = {process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-        initialViewState={{
-          longitude: 35,
-          latitude: 49,
-          zoom: 6
-        }}
+        initialViewState={viewport}
         style={{width: '100vw', height: '100vh'}}
         mapStyle="mapbox://styles/mapbox/streets-v9"
+        onDblClick={handleAddClick}
       >
         {pins.map((p) =>(
           <>
             <Marker longitude={p.long} latitude={p.lat} anchor="bottom" >
               <LocationOnIcon 
                 sx={{ fontSize: 60, color: "slateblue" }} 
-                onClick={()=>handleMarkerClick(p._id)}
+                onClick={()=>handleMarkerClick(p._id, p.lat, p.long)}
                />
               {p._id === currentPlaceId && ispopupVisible &&  (
                 <>
@@ -86,10 +103,35 @@ function App() {
                 </>
               )
             }
-
             </Marker>
 
             
+            {newPalce && (
+              <Popup 
+                longitude={newPalce.long} 
+                latitude={newPalce.lat}
+                anchor="bottom"
+                onClose={() => setNewPlace(null)}
+                >
+                <div>
+                  <form className="pin-form">
+                      <label>Toitle</label>
+                      <input placeholder="add title"/>
+                      <label>Review</label>
+                      <textarea placeholder="say something about the place"></textarea>
+                      <label>Rating</label>
+                      <select>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                      <button className="submitButton" type="submit">Add pin</button>
+                  </form>
+                </div>
+              </Popup>
+            )}
 
             
             
