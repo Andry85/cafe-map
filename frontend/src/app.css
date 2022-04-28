@@ -28,3 +28,18 @@ label {
 .date {
     font-size: 12px;
 }
+
+.popup {
+    background: #fff;
+    position: absolute;
+    padding: 10px;
+    top: 0;
+    left: 0;
+    transform: translate(60px, -50%);
+}
+
+.popup-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
