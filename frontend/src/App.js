@@ -10,8 +10,10 @@ import axios from 'axios';
 
 
 
+
 function App() {
 
+  const [currentUser, setCurrentUser] = useState(null);
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [ispopupVisible, setIspopupVisible] = useState(true);
@@ -20,7 +22,11 @@ function App() {
     longitude: 35,
     latitude: 49,
     zoom: 6
-  })
+  });
+
+  const [title, setTitle] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [rating, setRating] = useState(0);
   
 
 
@@ -61,6 +67,29 @@ function App() {
     });
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newPin = {
+      username: currentUser,
+      title,
+      description,
+      rating,
+      lat: newPalce.lat,
+      long: newPalce.long,
+    }
+
+    try {
+
+      const res = await axios.post("pins", newPin)
+      setPins([...pins, res.data]);
+      setNewPlace(null);
+    } catch(err) {
+      console.log(err);
+    }
+
+  }
+
 
 
   return (
@@ -76,7 +105,7 @@ function App() {
           <>
             <Marker longitude={p.long} latitude={p.lat} anchor="bottom" >
               <LocationOnIcon 
-                sx={{ fontSize: 60, color: "slateblue" }} 
+                sx={{ fontSize: 60, color: p.username === currentUser ? "tomato" : "slateblue" }} 
                 onClick={()=>handleMarkerClick(p._id, p.lat, p.long)}
                />
               {p._id === currentPlaceId && ispopupVisible &&  (
@@ -90,10 +119,7 @@ function App() {
                       <p className="desc">{p.description}</p>
                       <label>Rating</label>
                       <div className="stars">
-                        <StarIcon className="star" />
-                        <StarIcon className="star"/>
-                        <StarIcon className="star"/>
-                        <StarIcon className="star"/>
+                        {Array(p.rating).fill(<StarIcon className="star" />)}
                       </div>
                       <label>Information</label>
                       <span className="username">Created by <b>{p.username}</b></span>
@@ -114,13 +140,13 @@ function App() {
                 onClose={() => setNewPlace(null)}
                 >
                 <div>
-                  <form className="pin-form">
-                      <label>Toitle</label>
-                      <input placeholder="add title"/>
+                  <form className="pin-form" onSubmit={handleSubmit}>
+                      <label>Title</label>
+                      <input placeholder="add title" onChange={(e) => setTitle(e.target.value)}/>
                       <label>Review</label>
-                      <textarea placeholder="say something about the place"></textarea>
+                      <textarea placeholder="say something about the place" onChange={(e) => setDescription(e.target.value)}></textarea>
                       <label>Rating</label>
-                      <select>
+                      <select  onChange={(e) => setRating(e.target.value)}>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -131,16 +157,20 @@ function App() {
                   </form>
                 </div>
               </Popup>
-            )}
-
-            
-            
-            
-
-            
+            )}      
             </>
         ))}
 
+        {currentUser ? (
+          <button className="button logout">Log Out</button>
+        ) : (
+          <div className="buttons">
+            <button className="button login">Login</button>
+            <button className="button register">Register</button>
+          </div>
+        ) }
+
+        
         
       </Map>
     </div>
