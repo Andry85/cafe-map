@@ -45,6 +45,8 @@ label {
     cursor: pointer;
 }
 
+
+
 .pin-form {
     width: 100%;
     display: flex;
@@ -58,8 +60,27 @@ label {
 .pin-form textarea  {
     border: 0;
     border-bottom: 1px solid grey;
-    padding: 5px 0;
+    padding: 10px 0;
+    margin: 0 0 20px 0;
+    font-size: 14px;
 }
+
+.pin-form label {
+    margin: 0 0 5px 0;
+}
+
+.pin-form select {
+    width: 100%;
+    border: 1px solid var(--select-border);
+    border-radius: 0.25em;
+    padding: 0.25em 0;
+    font-size: 1.25rem;
+    cursor: pointer;
+    line-height: 1.1;
+    background-color: #fff;
+    background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+
 
 .pin-form input::placeholder,
 .pin-form textarea::placeholder {
