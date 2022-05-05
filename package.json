@@ -9,7 +9,7 @@
     "install-client": "cd frontend && npm i",
     "heroku-postbuild": "npm run install-client && npm run build",
     "start": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start\"",
-    "dev": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start\""
+    "dev": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start:dev\""
   },
   "repository": {
     "type": "git",
