@@ -1,0 +1,27 @@
+{
+  "name": "cafe-map",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd frontend && npm run build",
+    "install-client": "cd frontend && npm i",
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "start": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start\"",
+    "dev": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andry85/cafe-map.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Andry85/cafe-map/issues"
+  },
+  "homepage": "https://github.com/Andry85/cafe-map#readme",
+  "dependencies": {
+    "concurrently": "^7.1.0"
+  }
+}
